@@ -19,14 +19,35 @@ io.on("connection", (socket) => {
       io.emit("getOnlineUsers", onlineUsers);
   })
 
+  socket.on('block-conversation', (data) =>{
+    const user = onlineUsers.find(user => user.userID == data.idUser_)
+    console.log("user " + user);
+    if(user){
+      console.log("hehe có block ko? " + data.value);
+      socket.to(user.socketID).emit("blocked-conversation", data.value);
+    }
+  })
+
 
   socket.on("send-message", (data) => {
+    console.log("SEND Message");
     console.log(data._idSession);
     console.log(onlineUsers);
     const user = onlineUsers.find(user => user.userID == data._idSession)
     console.log(user);
     if(user){
-      socket.to(user.socketID).emit("recieve-message", data);
+      socket.to(user.socketID).emit("receive-message", data);
+    }
+  })
+
+  socket.on("send-file",(data)=>{
+    console.log("SEND FILE");
+    console.log(data._idSession);
+    console.log(onlineUsers);
+    const user = onlineUsers.find(user => user.userID == data._idSession)
+    console.log(user);
+    if(user){
+      socket.to(user.socketID).emit("receive-message",data);
     }
   })
 
