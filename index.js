@@ -19,6 +19,25 @@ io.on("connection", (socket) => {
       io.emit("getOnlineUsers", onlineUsers);
   })
 
+  socket.on('block-conversation', (data) =>{
+    const user = onlineUsers.find(user => user.userID == data.idUser_)
+    console.log("user " + user);
+    if(user){
+      console.log("hehe có block ko? " + data.value);
+      socket.to(user.socketID).emit("blocked-conversation", data);
+    }
+  })
+
+  socket.on('open-block-conversation', (data) =>{
+    const user = onlineUsers.find(user => user.userID == data.idUser_)
+    console.log("user " + user);
+    if(user){
+      console.log("hehe mở block ko? " + data.value);
+      socket.to(user.socketID).emit("opened-block-conversation", data);
+
+    }
+  })
+
 
   socket.on("send-message", (data) => {
     console.log(data._idSession);
