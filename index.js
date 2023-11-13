@@ -30,9 +30,9 @@ io.on("connection", (socket) => {
 
   socket.on('open-block-conversation', (data) =>{
     const user = onlineUsers.find(user => user.userID == data.idUser_)
-    console.log("user " + user);
+    console.log("user open " + user);
     if(user){
-      console.log("hehe mở block ko? " + data.value);
+      console.log("hehe mở block ko? " + data);
       socket.to(user.socketID).emit("opened-block-conversation", data);
 
     }
@@ -40,12 +40,24 @@ io.on("connection", (socket) => {
 
 
   socket.on("send-message", (data) => {
+    console.log("SEND Message");
     console.log(data._idSession);
     console.log(onlineUsers);
     const user = onlineUsers.find(user => user.userID == data._idSession)
     console.log(user);
     if(user){
-      socket.to(user.socketID).emit("recieve-message", data);
+      socket.to(user.socketID).emit("receive-message", data);
+    }
+  })
+
+  socket.on("send-file",(data)=>{
+    console.log("SEND FILE");
+    console.log(data._idSession);
+    console.log(onlineUsers);
+    const user = onlineUsers.find(user => user.userID == data._idSession)
+    console.log(user);
+    if(user){
+      socket.to(user.socketID).emit("receive-message",data);
     }
   })
 
