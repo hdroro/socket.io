@@ -19,6 +19,27 @@ io.on("connection", (socket) => {
       io.emit("getOnlineUsers", onlineUsers);
   })
 
+  socket.on("send-request-matching", (data) => {
+    // console.log('hong diem cho dien');
+    console.log('hoho', data);
+    const user = onlineUsers.find(user => user.userID == data.matchId)
+    // console.log(onlineUsers);
+    // console.log('bicute');
+    // console.log('hehe', user);
+    // console.log('bi siu cuteeeeeeee');
+    console.log(user);
+    if(user){
+      socket.to(user.socketID).emit("receive-request-matching", data);
+    }
+  })
+
+  socket.on("accept-request-matching", (data) => {
+    const user = onlineUsers.find(user => user.userID == data.fromId)
+    console.log(user);
+    if(user) {
+      socket.to(user.socketID).emit("move-to-new-conversation", data);
+    }
+  })
 
   socket.on("send-message", (data) => {
     console.log(data._idSession);
