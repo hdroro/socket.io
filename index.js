@@ -47,6 +47,12 @@ io.on("connection", (socket) => {
     console.log(user);
     if(user){
       socket.to(user.socketID).emit("receive-message", data);
+      socket.to(user.socketID).emit("receive-notification", {
+        senderID: data.idSession,
+        receiverID: data._idSession,
+        isRead: false,
+        date: new Date()
+      });
     }
   })
 
@@ -58,6 +64,12 @@ io.on("connection", (socket) => {
     console.log(user);
     if(user){
       socket.to(user.socketID).emit("receive-message",data);
+      socket.to(user.socketID).emit("receive-notification", {
+        senderID: data.idSession,
+        receiverID: data._idSession,
+        isRead: false,
+        date: new Date()
+      });
     }
   })
 
