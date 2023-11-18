@@ -69,6 +69,7 @@ io.on("connection", (socket) => {
     if(user){
       socket.to(user.socketID).emit("receive-message", data);
       socket.to(user.socketID).emit("receive-notification", {
+        idConversation: data.idConversation,
         senderID: data.idSession,
         receiverID: data._idSession,
         isRead: false,
@@ -86,6 +87,7 @@ io.on("connection", (socket) => {
     if(user){
       socket.to(user.socketID).emit("receive-message",data);
       socket.to(user.socketID).emit("receive-notification", {
+        idConversation: data.idConversation,
         senderID: data.idSession,
         receiverID: data._idSession,
         isRead: false,
