@@ -93,6 +93,26 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("deny-matching", (data) => {
+    console.log(data);
+    console.log('deny');
+    const user = onlineUsers.find(user => user.userID == data.fromId)
+    console.log(user);
+    if(user) {
+      socket.to(user.socketID).emit("send-deny-matching", data);
+    }
+  })
+
+  socket.on("create-notif-matching", (data) => {
+    console.log(data);
+    console.log('create-notif-matching');
+    const user = onlineUsers.find(user => user.userID == data.matchId)
+    console.log(user);
+    if(user) {
+      socket.to(user.socketID).emit("receive-notif-matching", data);
+    }
+  })
+
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((user) => user.socketID !== socket.id);
     io.emit("getOnlineUsers", onlineUsers);
