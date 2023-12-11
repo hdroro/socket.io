@@ -113,6 +113,10 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on("create-zodiac-message", (data) => {
+    console.log("create-zodiac-message");
+  })
+
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((user) => user.socketID !== socket.id);
     io.emit("getOnlineUsers", onlineUsers);
