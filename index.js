@@ -117,6 +117,48 @@ io.on("connection", (socket) => {
     console.log("create-zodiac-message");
   })
 
+  // socket.on("offer", (candidate) => {
+  //   console.log("on offer");
+  //   socket.broadcast.emit("offer", candidate);
+  // })
+
+  // socket.on("answer", (candidate) => {
+  //   console.log("on answer");
+  //   socket.broadcast.emit("answer", candidate);
+  // })
+
+  // socket.on("ice_candidate", (candidate) => {
+  //   console.log("on ice candidate");
+  //   socket.broadcast.emit("ice_candidate", candidate);
+  // })
+
+  socket.on("offer", (data) => {
+    const user = onlineUsers.find((user) => user.userID == data.toUserID);
+    if (user) {
+        console.log("offer");
+        console.log(data);
+        socket.to(user.socketID).emit("offer", data.offer);
+    }
+  });
+
+  socket.on("answer", (data) => {
+      const user = onlineUsers.find((user) => user.userID == data.toUserID);
+      if (user) {
+          console.log("offer");
+          console.log(data);
+          socket.to(user.socketID).emit("answer", data.answer);
+      }
+  });
+
+  socket.on("ice_candidate", (data) => {
+      const user = onlineUsers.find((user) => user.userID == data.toUserID);
+      if (user) {
+          console.log("offer");
+          console.log(data);
+          socket.to(user.socketID).emit("ice_candidate", data.candidate);
+      }
+  });
+
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((user) => user.socketID !== socket.id);
     io.emit("getOnlineUsers", onlineUsers);
