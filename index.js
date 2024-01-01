@@ -167,6 +167,15 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on("close-call", (data) => {
+    console.log('close-call socket')
+    console.log(data);
+    const user = onlineUsers.find((user) => user.userID == data.id);
+    if(user) {
+      socket.to(user.socketID).emit("receive-close-call", data);
+    }
+  })
+
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((user) => user.socketID !== socket.id);
     io.emit("getOnlineUsers", onlineUsers);
