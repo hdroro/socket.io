@@ -115,6 +115,7 @@ io.on("connection", (socket) => {
 
   socket.on("create-zodiac-message", (data) => {
     console.log("create-zodiac-message");
+    socket.broadcast.emit("receive-zodiac-message", data);
   })
 
   // socket.on("offer", (candidate) => {
