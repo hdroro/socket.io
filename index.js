@@ -60,6 +60,7 @@ io.on("connection", (socket) => {
   socket.on("send-message", (data) => {
     console.log("SEND Message");
     console.log(data._idSession);
+    console.log(data.idSession);
     console.log(onlineUsers);
     const user = onlineUsers.find((user) => user.userID == data._idSession);
     console.log(user);
@@ -136,46 +137,49 @@ io.on("connection", (socket) => {
   socket.on("offer", (data) => {
     const user = onlineUsers.find((user) => user.userID == data.toUserID);
     if (user) {
-        console.log("offer");
-        console.log(data);
-        socket.to(user.socketID).emit("offer", data.offer);
+      console.log("offer");
+      console.log(data);
+      socket.to(user.socketID).emit("offer", data.offer);
     }
   });
 
   socket.on("answer", (data) => {
-      const user = onlineUsers.find((user) => user.userID == data.toUserID);
-      if (user) {
-          console.log("offer");
-          console.log(data);
-          socket.to(user.socketID).emit("answer", data.answer);
-      }
+    const user = onlineUsers.find((user) => user.userID == data.toUserID);
+    if (user) {
+      console.log("offer");
+      console.log(data);
+      socket.to(user.socketID).emit("answer", data.answer);
+    }
   });
 
   socket.on("ice_candidate", (data) => {
-      const user = onlineUsers.find((user) => user.userID == data.toUserID);
-      if (user) {
-          console.log("offer");
-          console.log(data);
-          socket.to(user.socketID).emit("ice_candidate", data.candidate);
-      }
+    const user = onlineUsers.find((user) => user.userID == data.toUserID);
+    if (user) {
+      console.log("ice_candidate", data);
+      console.log(data);
+      socket.to(user.socketID).emit("ice_candidate", data.candidate);
+    }
   });
 
   socket.on("start-call", (data) => {
     console.log(data);
     const user = onlineUsers.find((user) => user.userID == data.to);
-    if(user) {
+    if (user) {
       socket.to(user.socketID).emit("receive-call", data);
     }
-  })
+  });
 
   socket.on("close-call", (data) => {
-    console.log('close-call socket')
-    console.log(data);
+    console.log("close-call socket", data);
     const user = onlineUsers.find((user) => user.userID == data.id);
-    if(user) {
+    if (user) {
       socket.to(user.socketID).emit("receive-close-call", data);
     }
-  })
+  });
+
+  socket.on("stop-calling", () => {
+    socket.emit("stopped-calling");
+  });
 
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((user) => user.socketID !== socket.id);
