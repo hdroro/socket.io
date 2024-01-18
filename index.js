@@ -1,6 +1,6 @@
 const { Server } = require("socket.io");
 
-const io = new Server({ cors: "http://localhost:8080" });
+const io = new Server({ cors: "http://192.168.241.219:8080" });
 
 let onlineUsers = [];
 
@@ -117,7 +117,7 @@ io.on("connection", (socket) => {
   socket.on("create-zodiac-message", (data) => {
     console.log("create-zodiac-message");
     socket.broadcast.emit("receive-zodiac-message", data);
-  })
+  });
 
   // socket.on("offer", (candidate) => {
   //   console.log("on offer");
@@ -148,7 +148,7 @@ io.on("connection", (socket) => {
     if (user) {
       console.log("offer");
       console.log(data);
-      socket.to(user.socketID).emit("answer", data.answer);
+      socket.to(user.socketID).emit("answer", data);
     }
   });
 
@@ -186,5 +186,8 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", onlineUsers);
   });
 });
-
-io.listen(3001);
+io.listen(3001, {
+  cors: "*",
+  origins: ["http://192.168.241.219:8080"],
+  path: "/socket.io",
+});
